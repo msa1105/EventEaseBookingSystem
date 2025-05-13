@@ -36,7 +36,7 @@ namespace EventEaseBookingSystem.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EventId1")
+                    b.Property<int?>("EventId")
                         .HasColumnType("int");
 
                     b.Property<int>("VenueId")
@@ -44,7 +44,7 @@ namespace EventEaseBookingSystem.Migrations
 
                     b.HasKey("BookingId");
 
-                    b.HasIndex("EventId1");
+                    b.HasIndex("EventId");
 
                     b.HasIndex("VenueId");
 
@@ -125,7 +125,7 @@ namespace EventEaseBookingSystem.Migrations
 
                     b.HasOne("EventEaseBookingSystem.Models.Event", null)
                         .WithMany("Bookings")
-                        .HasForeignKey("EventId1");
+                        .HasForeignKey("EventId");
 
                     b.HasOne("EventEaseBookingSystem.Models.Venue", "Venue")
                         .WithMany()

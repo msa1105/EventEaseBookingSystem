@@ -58,7 +58,7 @@ namespace EventEaseBookingSystem.Migrations
                     EventId = table.Column<int>(type: "int", nullable: false),
                     VenueId = table.Column<int>(type: "int", nullable: false),
                     BookingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EventId1 = table.Column<int>(type: "int", nullable: true)
+                    
                 },
                 constraints: table =>
                 {
@@ -70,8 +70,8 @@ namespace EventEaseBookingSystem.Migrations
                         principalColumn: "EventId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Bookings_Events_EventId1",
-                        column: x => x.EventId1,
+                        name: "FK_Bookings_Events_EventId",
+                        column: x => x.EventId,
                         principalTable: "Events",
                         principalColumn: "EventId");
                     table.ForeignKey(
@@ -89,9 +89,9 @@ namespace EventEaseBookingSystem.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Bookings_EventId1",
+                name: "IX_Bookings_EventId",
                 table: "Bookings",
-                column: "EventId1");
+                column: "EventId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bookings_VenueId",

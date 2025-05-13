@@ -1,5 +1,6 @@
 using EventEaseBookingSystem.Data;
 using EventEaseBookingSystem.Services;
+using FluentAssertions.Common;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -20,7 +21,8 @@ namespace EventEaseBookingSystem
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddScoped<BlobService>();
+            // In ConfigureServices method
+            builder.Services.AddScoped<BlobStorageService>();
 
             var app = builder.Build();
 

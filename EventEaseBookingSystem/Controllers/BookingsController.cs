@@ -20,10 +20,30 @@ namespace EventEaseBookingSystem.Controllers
         }
 
         // GET: Bookings
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString)
         {
-            var applicationDbContext = _context.Bookings.Include(b => b.Event).Include(b => b.Venue);
-            return View(await applicationDbContext.ToListAsync());
+            // Store the search string for display in the view
+            ViewData["CurrentFilter"] = searchString;
+
+            // Start with the base query
+            var bookingsQuery = _context.Booking
+                .Include(b => b.Event)
+                .Include(b => b.Venue)
+                .AsQueryable();
+
+            // Apply search filter if provided
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                bookingsQuery = bookingsQuery.Where(b =>
+                    // Search by booking ID (convert to string for comparison)
+                    b.BookingId.ToString().Contains(searchString) ||
+                    // Search by event name
+                    (b.Event != null && b.Event.EventName.Contains(searchString))
+                );
+            }
+
+            // Execute the query and return the results
+            return View(await bookingsQuery.ToListAsync());
         }
 
         // GET: Bookings/Details/5
@@ -34,7 +54,7 @@ namespace EventEaseBookingSystem.Controllers
                 return NotFound();
             }
 
-            var booking = await _context.Bookings
+            var booking = await _context.Booking
                 .Include(b => b.Event)
                 .Include(b => b.Venue)
                 .FirstOrDefaultAsync(m => m.BookingId == id);
@@ -80,7 +100,7 @@ namespace EventEaseBookingSystem.Controllers
                 return NotFound();
             }
 
-            var booking = await _context.Bookings.FindAsync(id);
+            var booking = await _context.Booking.FindAsync(id);
             if (booking == null)
             {
                 return NotFound();
@@ -135,7 +155,7 @@ namespace EventEaseBookingSystem.Controllers
                 return NotFound();
             }
 
-            var booking = await _context.Bookings
+            var booking = await _context.Booking
                 .Include(b => b.Event)
                 .Include(b => b.Venue)
                 .FirstOrDefaultAsync(m => m.BookingId == id);
@@ -152,10 +172,10 @@ namespace EventEaseBookingSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var booking = await _context.Bookings.FindAsync(id);
+            var booking = await _context.Booking.FindAsync(id);
             if (booking != null)
             {
-                _context.Bookings.Remove(booking);
+                _context.Booking.Remove(booking);
             }
 
             await _context.SaveChangesAsync();
@@ -164,7 +184,7 @@ namespace EventEaseBookingSystem.Controllers
 
         private bool BookingExists(int id)
         {
-            return _context.Bookings.Any(e => e.BookingId == id);
+            return _context.Booking.Any(e => e.BookingId == id);
         }
     }
 }

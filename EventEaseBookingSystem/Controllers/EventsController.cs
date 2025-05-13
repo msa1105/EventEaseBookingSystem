@@ -140,7 +140,7 @@ namespace EventEaseBookingSystem.Controllers
 
             if (@event != null)
             {
-                bool hasBookings = _context.Bookings.Any(b => b.EventId == id);
+                bool hasBookings = _context.Booking.Any(b => b.EventId == id);
 
                 if (hasBookings)
                 {

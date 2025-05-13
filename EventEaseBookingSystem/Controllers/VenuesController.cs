@@ -13,13 +13,14 @@ namespace EventEaseBookingSystem.Controllers
     public class VenuesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly BlobService _blobService;
+        private readonly BlobStorageService _blobService;
 
-        public VenuesController(ApplicationDbContext context, BlobService blobService)
-        {
-            _context = context;
-            _blobService = blobService;
-        }
+public VenuesController(ApplicationDbContext context, BlobStorageService blobService)
+{
+    _context = context;
+    _blobService = blobService;
+}
+
 
         // GET: Venues
         public async Task<IActionResult> Index()

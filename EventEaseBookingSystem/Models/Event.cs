@@ -22,6 +22,6 @@ namespace EventEaseBookingSystem.Models
 
      
 
-        public ICollection<Booking>? Bookings { get; set; }
+        public ICollection<Booking>? Booking { get; set; }
     }
 }

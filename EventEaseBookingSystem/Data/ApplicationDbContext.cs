@@ -11,7 +11,7 @@ namespace EventEaseBookingSystem.Data
 
         public DbSet<Venue> Venue { get; set; }
         public DbSet<Event> Event { get; set; }
-        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Booking> Booking { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,14 +23,14 @@ namespace EventEaseBookingSystem.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Booking>()
-                .HasOne(b => b.Event)
-                .WithMany()
-                .HasForeignKey(b => b.EventId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .HasOne(b => b.Event)  // Booking has one Event
+                .WithMany(e => e.Booking)  // Event has many Bookings
+                .HasForeignKey(b => b.EventId)  // Foreign key on Booking table
+                .OnDelete(DeleteBehavior.Restrict);  
 
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.Venue)
-                .WithMany()
+                .WithMany(e => e.Booking)
                 .HasForeignKey(b => b.VenueId)
                 .OnDelete(DeleteBehavior.Restrict);
 

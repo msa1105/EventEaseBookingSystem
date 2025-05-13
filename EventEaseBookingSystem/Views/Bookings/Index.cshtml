@@ -2,16 +2,34 @@
 @{
     ViewData["Title"] = "Bookings";
 }
-
 <h2>Bookings</h2>
-<p><a asp-action="Create">+ Add New Booking</a></p>
 
-<table>
+<div class="row mb-3">
+    <div class="col-md-6">
+        <form asp-action="Index" method="get">
+            <div class="input-group">
+                <input type="text" name="searchString" value="@ViewData["CurrentFilter"]" class="form-control" placeholder="Search by Event Name or Booking ID" />
+                <div class="input-group-append">
+                    <button type="submit" class="btn btn-primary">Search</button>
+                </div>
+            </div>
+            @if (!string.IsNullOrEmpty((string)ViewData["CurrentFilter"]))
+            {
+                <a asp-action="Index" class="btn btn-secondary mt-2">Clear Search</a>
+            }
+        </form>
+    </div>
+    <div class="col-md-6 text-right">
+        <p><a asp-action="Create" class="btn btn-success">+ Add New Booking</a></p>
+    </div>
+</div>
+
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Booking ID</th>
             <th>Event Name</th>
-            <th>Venue</th>
+            <th>Venue ID</th>
             <th></th>
         </tr>
     </thead>
@@ -21,7 +39,7 @@
             <tr>
                 <td>@item.BookingId</td>
                 <td>@item.Event?.EventName</td>
-                <td>@item.Venue</td>
+                <td>@item.VenueId</td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.BookingId">Edit</a> |
                     <a asp-action="Details" asp-route-id="@item.BookingId">Details</a> |
