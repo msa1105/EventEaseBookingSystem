@@ -1,24 +1,42 @@
 ﻿@model EventEaseBookingSystem.Models.Venue
+
 @{
     ViewData["Title"] = "Edit Venue";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit Venue</h2>
+<h1>Edit Venue</h1>
 
-<form asp-action="Edit">
+<form asp-action="Edit" enctype="multipart/form-data">
     <input type="hidden" asp-for="VenueId" />
+    <div class="form-group">
+        <label asp-for="VenueName" class="control-label"></label>
+        <input asp-for="VenueName" class="form-control" />
+        <span asp-validation-for="VenueName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Location" class="control-label"></label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Capacity" class="control-label"></label>
+        <input asp-for="Capacity" class="form-control" />
+        <span asp-validation-for="Capacity" class="text-danger"></span>
+    </div>
 
-    <label>Venue Name</label>
-    <input asp-for="VenueName" />
+    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+    {
+        <div class="mb-3">
+            <p>Current Image:</p>
+            <img src="@Model.ImageUrl" alt="Venue Image" style="max-width: 300px;" />
+        </div>
+    }
 
-    <label>Location</label>
-    <input asp-for="Location" />
+    <div class="form-group">
+        <label for="imageFile" class="control-label">Change Venue Image</label>
+        <input type="file" name="imageFile" class="form-control" accept="image/*" />
+    </div>
 
-    <label>Capacity</label>
-    <input asp-for="Capacity" type="number" />
-
-    <label>Image URL</label>
-    <input asp-for="ImageUrl" />
-
-    <button type="submit">Save</button>
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>

@@ -1,35 +1,95 @@
 ﻿@model IEnumerable<EventEaseBookingSystem.Models.Venue>
+
 @{
     ViewData["Title"] = "Venues";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Venues</h2>
-<p><a asp-action="Create">+ Add New Venue</a></p>
+<style>
+    .venue-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        padding: 20px;
+    }
 
-<table>
-    <thead>
-        <tr>
-            <th>Venue Name</th>
-            <th>Location</th>
-            <th>Capacity</th>
-            <th>Image</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
+    .venue-card {
+        background-color: #2a2a3c;
+        border-radius: 10px;
+        padding: 1rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+        color: #fff;
+        transition: transform 0.2s ease-in-out;
+    }
+
+    .venue-card:hover {
+        transform: scale(1.02);
+    }
+
+    .venue-image {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 6px;
+        margin-bottom: 1rem;
+    }
+
+    .venue-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #ffcc00;
+    }
+
+    .venue-meta {
+        font-size: 0.95rem;
+        margin-top: 0.5rem;
+    }
+
+    .action-links a {
+        margin-right: 10px;
+        color: #64b5f6;
+        text-decoration: none;
+    }
+
+    .action-links a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<h1>All Venues</h1>
+<p><a asp-action="Create" class="btn btn-primary">+ Add New Venue</a></p>
+
+@if (!Model.Any())
+{
+    <p>No venues found.</p>
+}
+else
+{
+    <div class="venue-grid">
+        @foreach (var venue in Model)
         {
-            <tr>
-                <td>@item.VenueName</td>
-                <td>@item.Location</td>
-                <td>@item.Capacity</td>
-                <td><img src="@item.ImageUrl" alt="Venue Image" width="100" /></td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.VenueId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.VenueId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.VenueId">Delete</a>
-                </td>
-            </tr>
+            <div class="venue-card">
+                @if (!string.IsNullOrEmpty(venue.ImageUrl))
+                {
+                    <img src="@venue.ImageUrl" alt="Venue Image" class="venue-image" />
+                }
+                else
+                {
+                    <img src="~/images/placeholder.png" alt="No Image" class="venue-image" />
+                }
+
+                <div class="venue-title">@venue.VenueName</div>
+                <div class="venue-meta">
+                    <div><strong>Location:</strong> @venue.Location</div>
+                    <div><strong>Capacity:</strong> @venue.Capacity</div>
+                </div>
+
+                <div class="action-links mt-2">
+                    <a asp-action="Edit" asp-route-id="@venue.VenueId">Edit</a>
+                    <a asp-action="Details" asp-route-id="@venue.VenueId">Details</a>
+                    <a asp-action="Delete" asp-route-id="@venue.VenueId">Delete</a>
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+}

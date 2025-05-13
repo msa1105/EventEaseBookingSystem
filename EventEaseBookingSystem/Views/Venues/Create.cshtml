@@ -1,22 +1,31 @@
 ﻿@model EventEaseBookingSystem.Models.Venue
+
 @{
     ViewData["Title"] = "Create Venue";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Create Venue</h2>
+<h1>Create Venue</h1>
 
-<form asp-action="Create">
-    <label>Venue Name</label>
-    <input asp-for="VenueName" />
-
-    <label>Location</label>
-    <input asp-for="Location" />
-
-    <label>Capacity</label>
-    <input asp-for="Capacity" type="number" />
-
-    <label>Image URL</label>
-    <input asp-for="ImageUrl" />
-
-    <button type="submit">Create</button>
+<form asp-action="Create" enctype="multipart/form-data" method="post">
+    <div class="form-group">
+        <label asp-for="VenueName" class="control-label"></label>
+        <input asp-for="VenueName" class="form-control" />
+        <span asp-validation-for="VenueName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Location" class="control-label"></label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Capacity" class="control-label"></label>
+        <input asp-for="Capacity" class="form-control" />
+        <span asp-validation-for="Capacity" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label for="imageFile" class="control-label">Venue Image</label>
+        <input type="file" name="imageFile" class="form-control" accept="image/*" />
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
 </form>

@@ -10,7 +10,7 @@ public class BlobService
     private readonly string _connectionString = "YourAzureBlobStorageConnectionString";
     private readonly string _containerName = "your-container-name";
 
-    public async Task<string> UploadFileAsync(IFormFile file)
+    public async Task<string> UploadFileAsync(IFormFile file, string v)
     {
         var blobClient = new BlobContainerClient(_connectionString, _containerName);
         await blobClient.CreateIfNotExistsAsync();
