@@ -6,25 +6,22 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using EventEaseBookingSystem.Data;
 using EventEaseBookingSystem.Models;
-using EventEaseBookingSystem.Services;
 
 namespace EventEaseBookingSystem.Controllers
 {
     public class EventsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly BlobService _blobService;
 
-        public EventsController(ApplicationDbContext context, BlobService blobService)
+        public EventsController(ApplicationDbContext context)
         {
             _context = context;
-            _blobService = blobService;
         }
 
         // GET: Events
         public async Task<IActionResult> Index(string searchString)
         {
-            var events = _context.Events.Include(e => e.Venue).AsQueryable();
+            var events = _context.Event.Include(e => e.Venue).AsQueryable();
 
             if (!string.IsNullOrEmpty(searchString))
             {
@@ -37,32 +34,26 @@ namespace EventEaseBookingSystem.Controllers
         // GET: Events/Create
         public IActionResult Create()
         {
-            ViewData["VenueId"] = new SelectList(_context.Venues, "VenueId", "VenueName");
+            ViewData["VenueId"] = new SelectList(_context.Venue, "VenueId", "VenueName");
             return View();
         }
 
         // POST: Events/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Event @event, IFormFile imageFile)
+        public async Task<IActionResult> Create(Event @event)
         {
             if (ModelState.IsValid)
             {
                 // Prevent double booking: same venue + same date
-                bool isDoubleBooked = _context.Events.Any(e =>
+                bool isDoubleBooked = _context.Event.Any(e =>
                     e.VenueId == @event.VenueId && e.EventDate.Date == @event.EventDate.Date);
 
                 if (isDoubleBooked)
                 {
                     ModelState.AddModelError(string.Empty, "This venue is already booked on the selected date.");
-                    ViewData["VenueId"] = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
+                    ViewData["VenueId"] = new SelectList(_context.Venue, "VenueId", "VenueName", @event.VenueId);
                     return View(@event);
-                }
-
-                if (imageFile != null && imageFile.Length > 0)
-                {
-                    var imageUrl = await _blobService.UploadFileAsync(imageFile);
-                    @event.ImageUrl = imageUrl;
                 }
 
                 _context.Add(@event);
@@ -70,7 +61,7 @@ namespace EventEaseBookingSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["VenueId"] = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
+            ViewData["VenueId"] = new SelectList(_context.Venue, "VenueId", "VenueName", @event.VenueId);
             return View(@event);
         }
 
@@ -79,17 +70,17 @@ namespace EventEaseBookingSystem.Controllers
         {
             if (id == null) return NotFound();
 
-            var @event = await _context.Events.FindAsync(id);
+            var @event = await _context.Event.FindAsync(id);
             if (@event == null) return NotFound();
 
-            ViewData["VenueId"] = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
+            ViewData["VenueId"] = new SelectList(_context.Venue, "VenueId", "VenueName", @event.VenueId);
             return View(@event);
         }
 
         // POST: Events/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Event @event, IFormFile imageFile)
+        public async Task<IActionResult> Edit(int id, Event @event)
         {
             if (id != @event.EventId) return NotFound();
 
@@ -98,7 +89,7 @@ namespace EventEaseBookingSystem.Controllers
                 try
                 {
                     // Check for double booking (excluding the current event)
-                    bool isDoubleBooked = _context.Events.Any(e =>
+                    bool isDoubleBooked = _context.Event.Any(e =>
                         e.EventId != id &&
                         e.VenueId == @event.VenueId &&
                         e.EventDate.Date == @event.EventDate.Date);
@@ -106,14 +97,8 @@ namespace EventEaseBookingSystem.Controllers
                     if (isDoubleBooked)
                     {
                         ModelState.AddModelError(string.Empty, "This venue is already booked on the selected date.");
-                        ViewData["VenueId"] = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
+                        ViewData["VenueId"] = new SelectList(_context.Venue, "VenueId", "VenueName", @event.VenueId);
                         return View(@event);
-                    }
-
-                    if (imageFile != null && imageFile.Length > 0)
-                    {
-                        var imageUrl = await _blobService.UploadFileAsync(imageFile);
-                        @event.ImageUrl = imageUrl;
                     }
 
                     _context.Update(@event);
@@ -128,7 +113,7 @@ namespace EventEaseBookingSystem.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewData["VenueId"] = new SelectList(_context.Venues, "VenueId", "VenueName", @event.VenueId);
+            ViewData["VenueId"] = new SelectList(_context.Venue, "VenueId", "VenueName", @event.VenueId);
             return View(@event);
         }
 
@@ -137,7 +122,7 @@ namespace EventEaseBookingSystem.Controllers
         {
             if (id == null) return NotFound();
 
-            var @event = await _context.Events
+            var @event = await _context.Event
                 .Include(e => e.Venue)
                 .FirstOrDefaultAsync(e => e.EventId == id);
 
@@ -151,7 +136,7 @@ namespace EventEaseBookingSystem.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var @event = await _context.Events.FindAsync(id);
+            var @event = await _context.Event.FindAsync(id);
 
             if (@event != null)
             {
@@ -163,7 +148,7 @@ namespace EventEaseBookingSystem.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                _context.Events.Remove(@event);
+                _context.Event.Remove(@event);
                 await _context.SaveChangesAsync();
             }
 
@@ -172,7 +157,7 @@ namespace EventEaseBookingSystem.Controllers
 
         private bool EventExists(int id)
         {
-            return _context.Events.Any(e => e.EventId == id);
+            return _context.Event.Any(e => e.EventId == id);
         }
     }
 }

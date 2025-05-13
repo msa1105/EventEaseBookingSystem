@@ -1,33 +1,91 @@
 ﻿@model IEnumerable<EventEaseBookingSystem.Models.Event>
+
 @{
-    ViewData["Title"] = "Events";
+    ViewData["Title"] = "Event";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Events</h2>
-<p><a asp-action="Create">+ Add New Event</a></p>
+<style>
+    body {
+        background-color: #121212;
+        color: #ffffff;
+        font-family: 'Segoe UI', sans-serif;
+    }
 
-<table>
-    <thead>
-        <tr>
-            <th>Title</th>
-            <th>Date</th>
-            <th>Venue</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.EventName</td>
-                <td>@item.EventDate.ToShortDateString()</td>
-                <td>@item.Venue?.VenueName</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.EventId">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.EventId">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a>
-                </td>
-            </tr>
+    .event-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 24px;
+        padding: 20px;
+    }
+
+    .event-card {
+        background-color: #1e1e1e;
+        border-radius: 10px;
+        padding: 16px;
+        width: 300px;
+        box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+        transition: transform 0.2s ease-in-out;
+    }
+
+        .event-card:hover {
+            transform: scale(1.03);
         }
-    </tbody>
-</table>
+
+    .event-name {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 6px;
+        color: #90caf9;
+    }
+
+    .event-description {
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .event-meta {
+        font-size: 13px;
+        color: #bbbbbb;
+    }
+
+    .action-links {
+        margin-top: 12px;
+    }
+
+        .action-links a {
+            color: #64b5f6;
+            margin-right: 10px;
+            text-decoration: none;
+        }
+
+            .action-links a:hover {
+                text-decoration: underline;
+            }
+</style>
+
+<h1>All Events</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New Event</a>
+</p>
+
+<div class="event-container">
+    @foreach (var item in Model)
+    {
+        <div class="event-card">
+            <div class="event-name">@item.EventName</div>
+            <div class="event-description">@item.Description</div>
+            <div class="event-meta">
+                <div><strong>Date:</strong> @item.EventDate.ToString("yyyy-MM-dd")</div>
+                <div><strong>Venue:</strong> @item.Venue?.VenueName</div>
+            </div>
+
+            <div class="action-links">
+                <a asp-action="Edit" asp-route-id="@item.EventId">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.EventId">Details</a>
+                <a asp-action="Delete" asp-route-id="@item.EventId">Delete</a>
+            </div>
+        </div>
+    }
+</div>

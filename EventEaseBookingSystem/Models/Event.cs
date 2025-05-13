@@ -20,7 +20,7 @@ namespace EventEaseBookingSystem.Models
         public int VenueId { get; set; }
         public Venue? Venue { get; set; }
 
-        public string? ImageUrl { get; set; }
+     
 
         public ICollection<Booking>? Bookings { get; set; }
     }

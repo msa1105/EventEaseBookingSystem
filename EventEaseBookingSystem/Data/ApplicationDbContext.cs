@@ -9,8 +9,8 @@ namespace EventEaseBookingSystem.Data
         {
         }
 
-        public DbSet<Venue> Venues { get; set; }
-        public DbSet<Event> Events { get; set; }
+        public DbSet<Venue> Venue { get; set; }
+        public DbSet<Event> Event { get; set; }
         public DbSet<Booking> Bookings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -18,7 +18,7 @@ namespace EventEaseBookingSystem.Data
             // Define one-to-many relationships
             modelBuilder.Entity<Event>()
                 .HasOne(e => e.Venue)
-                .WithMany(v => v.Events)
+                .WithMany(static v => v.Event)
                 .HasForeignKey(e => e.VenueId)
                 .OnDelete(DeleteBehavior.Restrict);
 

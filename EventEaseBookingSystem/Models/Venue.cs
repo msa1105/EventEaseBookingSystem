@@ -8,7 +8,7 @@ namespace EventEaseBookingSystem.Models
         public int VenueId { get; set; }
 
         [Required]
-        public string VenueName { get; set; }
+        public required string VenueName { get; set; }
 
         public string Location { get; set; }
 
@@ -17,6 +17,6 @@ namespace EventEaseBookingSystem.Models
         public string ImageUrl { get; set; }
 
         // Navigation property
-        public ICollection<Event> Events { get; set; }
+        public ICollection<Event> Event { get; set; }
     }
 }
