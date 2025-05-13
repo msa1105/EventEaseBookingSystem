@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - EventEase</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="dark-mode">
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a class="brand" asp-controller="Home" asp-action="Index">EventEase</a>
+                <div class="nav-links">
+                    <a asp-controller="Venues" asp-action="Index">Venues</a>
+                    <a asp-controller="Events" asp-action="Index">Events</a>
+                    <a asp-controller="Bookings" asp-action="Index">Bookings</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <main class="container">
+        @RenderBody()
+    </main>
+    <footer class="footer">
+        <div class="container">
+            &copy; @DateTime.Now.Year - EventEase
+        </div>
+    </footer>
+</body>
+</html>

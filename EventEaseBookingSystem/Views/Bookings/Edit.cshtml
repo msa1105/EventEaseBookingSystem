@@ -1,0 +1,21 @@
+﻿@model EventEaseBookingSystem.Models.Booking;
+@{
+    ViewData["Title"] = "Edit Booking";
+}
+
+<h2>Edit Booking</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="BookingId" />
+
+    <label>Booking ID</label>
+    <input asp-for="BookingId" />
+
+    <label>Event</label>
+    <select asp-for="Event" asp-items="ViewBag.Event"></select>
+
+    <label>Venue Booked</label>
+    <input asp-for="Venue" />
+
+    <button type="submit">Save</button>
+</form>

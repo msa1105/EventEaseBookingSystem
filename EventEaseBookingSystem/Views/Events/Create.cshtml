@@ -1,0 +1,19 @@
+﻿@model EventEaseBookingSystem.Models.Event
+@{
+    ViewData["Title"] = "Create Event";
+}
+
+<h2>Create Event</h2>
+
+<form asp-action="Create">
+    <label>Title</label>
+    <input asp-for="EventName" />
+
+    <label>Date</label>
+    <input asp-for="EventDate" type="date" />
+
+    <label>Venue</label>
+    <select asp-for="VenueId" asp-items="ViewBag.VenueId"></select>
+
+    <button type="submit">Create</button>
+</form>

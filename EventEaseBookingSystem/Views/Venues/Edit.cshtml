@@ -1,0 +1,24 @@
+﻿@model EventEaseBookingSystem.Models.Venue
+@{
+    ViewData["Title"] = "Edit Venue";
+}
+
+<h2>Edit Venue</h2>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="VenueId" />
+
+    <label>Venue Name</label>
+    <input asp-for="VenueName" />
+
+    <label>Location</label>
+    <input asp-for="Location" />
+
+    <label>Capacity</label>
+    <input asp-for="Capacity" type="number" />
+
+    <label>Image URL</label>
+    <input asp-for="ImageUrl" />
+
+    <button type="submit">Save</button>
+</form>
