@@ -12,6 +12,8 @@ namespace EventEaseBookingSystem.Data
         public DbSet<Venue> Venue { get; set; }
         public DbSet<Event> Event { get; set; }
         public DbSet<Booking> Booking { get; set; }
+        public DbSet<EventType> EventTypes { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -38,6 +40,8 @@ namespace EventEaseBookingSystem.Data
             modelBuilder.Entity<Booking>()
                 .HasIndex(b => new { b.EventId, b.VenueId })
                 .IsUnique();
+
+
 
             base.OnModelCreating(modelBuilder);
         }

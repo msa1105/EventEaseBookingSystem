@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EventEaseBookingSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250513183442_SecondInstance")]
-    partial class SecondInstance
+    [Migration("20250623203717_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,22 +39,17 @@ namespace EventEaseBookingSystem.Migrations
                     b.Property<int>("EventId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EventId")
-                        .HasColumnType("int");
-
                     b.Property<int>("VenueId")
                         .HasColumnType("int");
 
                     b.HasKey("BookingId");
-
-                    b.HasIndex( "EventId");
 
                     b.HasIndex("VenueId");
 
                     b.HasIndex("EventId", "VenueId")
                         .IsUnique();
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Booking");
                 });
 
             modelBuilder.Entity("EventEaseBookingSystem.Models.Event", b =>
@@ -77,9 +72,6 @@ namespace EventEaseBookingSystem.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("VenueId")
                         .HasColumnType("int");
 
@@ -87,7 +79,7 @@ namespace EventEaseBookingSystem.Migrations
 
                     b.HasIndex("VenueId");
 
-                    b.ToTable("Events");
+                    b.ToTable("Event");
                 });
 
             modelBuilder.Entity("EventEaseBookingSystem.Models.Venue", b =>
@@ -103,7 +95,8 @@ namespace EventEaseBookingSystem.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -115,23 +108,19 @@ namespace EventEaseBookingSystem.Migrations
 
                     b.HasKey("VenueId");
 
-                    b.ToTable("Venues");
+                    b.ToTable("Venue");
                 });
 
             modelBuilder.Entity("EventEaseBookingSystem.Models.Booking", b =>
                 {
                     b.HasOne("EventEaseBookingSystem.Models.Event", "Event")
-                        .WithMany()
+                        .WithMany("Booking")
                         .HasForeignKey("EventId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("EventEaseBookingSystem.Models.Event", null)
-                        .WithMany("Bookings")
-                        .HasForeignKey("EventId");
-
                     b.HasOne("EventEaseBookingSystem.Models.Venue", "Venue")
-                        .WithMany()
+                        .WithMany("Booking")
                         .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -144,7 +133,7 @@ namespace EventEaseBookingSystem.Migrations
             modelBuilder.Entity("EventEaseBookingSystem.Models.Event", b =>
                 {
                     b.HasOne("EventEaseBookingSystem.Models.Venue", "Venue")
-                        .WithMany("Events")
+                        .WithMany("Event")
                         .HasForeignKey("VenueId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
@@ -154,12 +143,14 @@ namespace EventEaseBookingSystem.Migrations
 
             modelBuilder.Entity("EventEaseBookingSystem.Models.Event", b =>
                 {
-                    b.Navigation("Bookings");
+                    b.Navigation("Booking");
                 });
 
             modelBuilder.Entity("EventEaseBookingSystem.Models.Venue", b =>
                 {
-                    b.Navigation("Events");
+                    b.Navigation("Booking");
+
+                    b.Navigation("Event");
                 });
 #pragma warning restore 612, 618
         }

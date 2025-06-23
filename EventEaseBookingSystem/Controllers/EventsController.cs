@@ -158,6 +158,8 @@ namespace EventEaseBookingSystem.Controllers
         private bool EventExists(int id)
         {
             return _context.Event.Any(e => e.EventId == id);
+
+
         }
     }
 }

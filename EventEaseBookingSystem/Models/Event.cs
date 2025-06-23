@@ -20,7 +20,13 @@ namespace EventEaseBookingSystem.Models
         public int VenueId { get; set; }
         public Venue? Venue { get; set; }
 
-     
+        // Foreign key
+        public int EventTypeId { get; set; }
+
+        // Navigation property
+        public EventType EventType { get; set; }
+
+
 
         public ICollection<Booking>? Booking { get; set; }
     }

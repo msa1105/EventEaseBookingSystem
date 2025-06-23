@@ -15,6 +15,9 @@ namespace EventEaseBookingSystem.Models
         [StringLength(255)]
         public string ImageUrl { get; set; }
 
+        public bool IsAvailable { get; set; }
+
+
         [NotMapped]
         [Display(Name = "Venue Image")]
         public IFormFile ImageFile { get; set; }
